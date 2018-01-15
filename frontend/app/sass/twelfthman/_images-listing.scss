@@ -1,0 +1,58 @@
+#images {
+    margin-top: 30px;
+}
+
+.image-container {
+    border: 1px solid $border-color;
+    margin-bottom: 30px;
+
+    &:first-child, &:nth-child(5n) {
+        margin-left: 0;
+    }
+
+    .image-container_canvas {
+        width: 100%;
+        height: 100px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+        }
+    }
+
+    .image-description {
+        height: 60px;
+        text-align: center;
+        background: #FFF;
+        overflow: hidden;
+
+        p {
+            display: inline-block;
+            padding-top: 10px;
+        }
+    }
+}
+
+#item-selected-action {
+    width: 60%;
+    margin-left: -30%;
+    height: 40px;
+    left: 50%;
+    bottom: 0;
+    position: fixed;
+    background: $grey-dark;
+    text-align: center;
+    padding-top: 10px;
+    color: #FFF;
+
+    a {
+        color: #FFF;
+
+        &:first-child {
+            margin-right: 5px;
+        }
+        &:hover {
+            color: #FF0;
+        }
+    }
+}

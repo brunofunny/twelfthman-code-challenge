@@ -1,0 +1,23 @@
+// Font weights
+$light: 100;
+$regular: 400;
+$bold: 600;
+
+// Base Font
+$base-font-family: 'Questrial', sans-serif;
+$base-font-weight: $regular;
+$base-font-size: 13px;
+$base-line-height: 1.4;
+
+// Colors
+$grey: #f3f4f8;
+$grey-light: #cccccc;
+$grey-medium: #9597a0;
+$grey-dark: #4f587d;
+
+// Layout
+$background: $grey;
+$logo: $grey-dark;
+
+// Image
+$border-color: $grey-light; 

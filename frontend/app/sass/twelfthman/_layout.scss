@@ -1,0 +1,23 @@
+body {
+    font-family: $base-font-family;
+    font-size: $base-font-size;
+    line-height: $base-line-height;
+    font-weight: $regular;
+    background: $background;
+}
+
+header {
+    background: #FFF;
+    padding-top: 60px;
+    padding-bottom: 20px;
+}
+
+header #logo {
+    font-size: 25px;
+    font-weight: $light;
+    color: $logo;
+}
+
+#nav-action-buttons {
+    margin-top: 30px;
+}
