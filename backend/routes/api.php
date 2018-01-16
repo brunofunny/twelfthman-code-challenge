@@ -1,5 +1,6 @@
 <?php
 
-Route::get('images/{filter?}', '\Twelfthman\Api\Library\Controllers\LibraryController@test');
-Route::delete('images/{id?}', '\Twelfthman\Api\Library\Controllers\LibraryController@delete');
-Route::get('images-restore/{id?}', '\Twelfthman\Api\Library\Controllers\LibraryController@restore');
+Route::get('images/{filter?}', '\App\Api\Controllers\ImagesController@list');
+Route::delete('images/{id?}', '\App\Api\Controllers\ImagesController@delete');
+Route::get('images/restore/{id?}', '\App\Api\Controllers\ImagesController@restore');
+Route::get('images/download/{id?}', '\App\Api\Controllers\ImagesController@download');

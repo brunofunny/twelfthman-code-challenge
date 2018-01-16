@@ -1,6 +1,6 @@
 <?php
 
-namespace Twelfthman\Support;
+namespace App\Support;
 
 class Helpers {
 	

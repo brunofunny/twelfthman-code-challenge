@@ -1,3 +1,5 @@
+import { environment } from './../environments/environment';
+import { environment } from '../environments/environment';
 import { Component } from '@angular/core';
 import { FetchImagesService } from './fetch-images.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
@@ -12,8 +14,9 @@ export class AppComponent {
   images : any;
   filterIsChecked : boolean;
   imageSelectedId : number;
-  imageUrl : string;
-  imagePath = 'assets/imgs/';
+  imageName : string;
+  imageSysName : string;
+  environment = environment;
 
   constructor(public FetchImagesService: FetchImagesService, public modalService: NgbModal) {
     this.filterIsChecked = true;
@@ -34,14 +37,12 @@ export class AppComponent {
   pickImage(image:any, e) {
     e.stopPropagation();
     this.imageSelectedId = image.id;
-    this.imageUrl = image.image;
+    this.imageName = image.file_original_name;
+    this.imageSysName = image.file_system_name;
   }
 
   confirmDelete(content) {
-    this.modalService.open(content).result.then((result) => {
-    }, (reason) => {
-    
-    });
+    this.modalService.open(content).result.then((result) => {}, (reason) => {});
   }
 
   deleteImage() {
@@ -59,22 +60,26 @@ export class AppComponent {
   }
 
   downloadImage() {
-    var xhr = new XMLHttpRequest();
-    var formData = new FormData();
-    xhr.open('GET', this.imagePath + this.imageUrl, true);
-    xhr.responseType = 'blob';
+    this.FetchImagesService.downloadImage(this.imageSelectedId).subscribe((data:any) => {
+      window.location = data._body;
+    });
+    // var xhr = new XMLHttpRequest();
+    // var formData = new FormData();
+    // xhr.open('GET', this.environment.imagesUrl + this.imageSysName, true);
+    // xhr.responseType = 'blob';
+    // xhr.withCredentials = true;
 
-    xhr.onload = (e) =>
-    {
-        var blob = new Blob([xhr.response], { type: "image/*"});
-        var objectUrl = URL.createObjectURL(blob);
-        var anchor = document.createElement("a");
-        anchor.download = this.imageUrl;
-        anchor.href = objectUrl;
-        anchor.click();
-    }
+    // xhr.onload = (e) =>
+    // {
+        // var blob = new Blob([xhr.response], { type: "image/*"});
+        // var objectUrl = URL.createObjectURL(blob);
+        // var anchor = document.createElement("a");
+        // anchor.download = this.imageName;
+        // anchor.href = objectUrl;
+        // anchor.click();
+    // }
 
-    xhr.send();
+    // xhr.send();
   }
 
   unselectImage(e) {

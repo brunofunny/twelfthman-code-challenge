@@ -18,9 +18,9 @@
       <div class="row">
           <div *ngFor="let image of images" class="col-xs-6 col-sm-4 col-lg-3" (click)="pickImage(image, $event)">
               <div class="image-container {{image.id === imageSelectedId ? 'selected' : ''}}">
-                  <div class="image-container-canvas"><img [src]="'assets/imgs/' + image.image"></div>
+                  <div class="image-container-canvas"><img [src]="environment.imagesUrl + image.file_system_name"></div>
                   <div class="image-container-description">
-                      <p>{{image.name}}</p>
+                      <p>{{image.caption}}</p>
                   </div>
               </div>
           </div>
@@ -31,7 +31,7 @@
 <div id="image-selected-actions" [hidden]="!imageSelectedId">
   <a href="javascript:;" (click)="confirmDelete(content)"><i class="oi oi-trash" [hidden]="!filterIsChecked"></i></a>
   <a href="javascript:;" (click)="restoreImage()"><i class="oi oi-action-undo" [hidden]="filterIsChecked"></i></a>
-  <a href="javascript:;" (click)="downloadImage()"><i class="oi oi-data-transfer-download"></i></a>
+  <a href="{{environment.imagesApi + 'images/download/' + imageSelectedId}}" [hidden]="!filterIsChecked"><i class="oi oi-data-transfer-download"></i></a>
 </div>
 
 <ng-template #content let-c="close" let-d="dismiss">

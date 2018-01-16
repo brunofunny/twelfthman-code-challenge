@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => Twelfthman\Sys\Models\User::class,
+            'model' => App\User::class,
         ],
 
         // 'users' => [

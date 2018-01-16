@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Twelfthman - Code Challenge'),
+    'name' => env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://127.0.0.1'),
+    'url' => env('APP_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -163,7 +163,6 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Barryvdh\Cors\ServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -172,11 +171,13 @@ return [
         /*
          * Application Service Providers...
          */
-        Twelfthman\Sys\Providers\AppServiceProvider::class,
-        Twelfthman\Sys\Providers\AuthServiceProvider::class,
-        // Twelfthman\Sys\Providers\BroadcastServiceProvider::class,
-        Twelfthman\Sys\Providers\EventServiceProvider::class,
-        Twelfthman\Sys\Providers\RouteServiceProvider::class,
+        App\Providers\AppServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
+        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 
