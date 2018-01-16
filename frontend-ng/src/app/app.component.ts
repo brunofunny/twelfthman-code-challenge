@@ -1,5 +1,4 @@
 import { environment } from './../environments/environment';
-import { environment } from '../environments/environment';
 import { Component } from '@angular/core';
 import { FetchImagesService } from './fetch-images.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
@@ -47,39 +46,14 @@ export class AppComponent {
 
   deleteImage() {
     this.FetchImagesService.deleteImage(this.imageSelectedId).subscribe((data:any) => {
-      console.log(data);
       this.filterImages("all");
     });
   }
 
   restoreImage() {
     this.FetchImagesService.restoreImage(this.imageSelectedId).subscribe((data:any) => {
-      console.log(data);
       this.filterImages("all");
     });
-  }
-
-  downloadImage() {
-    this.FetchImagesService.downloadImage(this.imageSelectedId).subscribe((data:any) => {
-      window.location = data._body;
-    });
-    // var xhr = new XMLHttpRequest();
-    // var formData = new FormData();
-    // xhr.open('GET', this.environment.imagesUrl + this.imageSysName, true);
-    // xhr.responseType = 'blob';
-    // xhr.withCredentials = true;
-
-    // xhr.onload = (e) =>
-    // {
-        // var blob = new Blob([xhr.response], { type: "image/*"});
-        // var objectUrl = URL.createObjectURL(blob);
-        // var anchor = document.createElement("a");
-        // anchor.download = this.imageName;
-        // anchor.href = objectUrl;
-        // anchor.click();
-    // }
-
-    // xhr.send();
   }
 
   unselectImage(e) {

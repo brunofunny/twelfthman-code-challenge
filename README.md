@@ -26,7 +26,7 @@ Clone this repo:
     git clone https://github.com/brunofunny/twelfthman-code-challenge.git
 ```
 
-##### Backend
+### Backend
 
 1. Go to directory:
 ```bash
@@ -44,6 +44,14 @@ Clone this repo:
 ```bash
     php artisan key:generate
 ```
+5. You must install the database tables now, run the line below
+```bash
+    php artisan migrate:install; php artisan migrate:migrate
+```
+5. Then now we populate the database with some data (this file (load.zip) also contains some images that are suppose to return errors (exceed size limit))
+```bash
+    php artisan import:image load.zip
+```
 5. Run the server using the default params
 ```bash
     php artisan serve
@@ -52,7 +60,7 @@ Clone this repo:
 
     http://127.0.0.1:8000/
 
-##### Frontend
+### Frontend
 
 1. Go to directory:
 ```bash
@@ -64,7 +72,7 @@ Clone this repo:
 ```
 5. Run the server using the default params
 ```bash
-    ng serve
+    ng serve --env=dev
 ```
 6. Access this url in the browser:
 
