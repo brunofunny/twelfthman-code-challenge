@@ -11,23 +11,30 @@ export class FetchImagesService {
 
   constructor(public http: Http) { }
 
+  /**
+   * Fetch all images according to the type
+   * @param type
+   */
   fetchImages(type?:string): Observable<any> {
     type = type || "all";
     return this.http.get(environment.imagesApi + 'images/' + type)
         .map((response: Response) => <any>response.json());
-        // .do(data => console.log('All: ' + JSON.stringify(data)));
   }
 
+  /**
+   * Delete image by id
+   * @param id
+   */
   deleteImage(id:number): Observable<any> {
     return this.http.delete(environment.imagesApi + 'images/' + id);
   }
 
+  /**
+   * Restore image by id
+   * @param id
+   */
   restoreImage(id:number): Observable<any> {
     return this.http.get(environment.imagesApi + 'images/restore/' + id);
-  }
-
-  downloadImage(id:number): Observable<any> {
-    return this.http.get(environment.imagesApi + 'images/download/' + id);
   }
 
 }

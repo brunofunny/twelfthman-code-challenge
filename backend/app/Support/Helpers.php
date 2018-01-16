@@ -3,7 +3,7 @@
 namespace App\Support;
 
 class Helpers {
-	
+
 	/**
 	 * Recursively delete a dir
 	 * @param  String $str
@@ -30,8 +30,8 @@ class Helpers {
 
 	/**
 	 * Replace all latin and other chars
-	 * @param  String $str 
-	 * @return String      
+	 * @param  String $str
+	 * @return String
 	 */
 	public function slugify(String $str)
 	{
@@ -79,6 +79,24 @@ class Helpers {
 	    ];
 
 	    return strtr($str, $replace);
+	}
+
+	/**
+	 * Format file size to be human readable
+	 * @param  Integer $bytes
+	 * @param  Integer $precision
+	 * @return String
+	 */
+	function formatBytes($bytes, $precision = 2) {
+		$units = array('B', 'KB', 'MB', 'GB', 'TB');
+
+		$bytes = max($bytes, 0);
+		$pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+		$pow = min($pow, count($units) - 1);
+
+		$bytes /= pow(1024, $pow);
+
+		return round($bytes, $precision) . ' ' . $units[$pow];
 	}
 
 }

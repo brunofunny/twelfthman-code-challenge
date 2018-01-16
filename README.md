@@ -1,3 +1,4 @@
+
 # Twelfthman - Developer Test
 
 ### Challenge
@@ -8,13 +9,17 @@ All details at https://twelfthman.co/interview-tests/developers/
 
 - **PHP 7.x**
 - **Laravel**
-- **Angular**
+- **Angular 5**
 - **SASS**
 
 ### Requirements
 
 - **GIT**
 - **PHP 7.x**
+	- mbstring
+	- dom
+	- mysql
+	- pdo
 - **Composer**
 - **Angular-Cli**
 - **Node/NPM**
@@ -40,23 +45,25 @@ Clone this repo:
 ```bash
     cp .env.example .env
 ```
-4. Generate application key
+4. Create a database in your MySQL Database called "twelfthman"
+
+5. Generate application key
 ```bash
     php artisan key:generate
 ```
-5. You must install the database tables now, run the line below
+6. You must install the database tables now, run the line below
 ```bash
     php artisan migrate:install; php artisan migrate
 ```
-5. Then now we populate the database with some data (this file (load.zip) also contains some images that are suppose to return errors (exceed size limit))
+7. Then now we populate the database with some data (this file (load.zip) also contains some images that are suppose to return errors (exceed size limit))
 ```bash
     php artisan import:image load.zip
 ```
-5. Run the server using the default params
+8. Run the server using the default params
 ```bash
     php artisan serve
 ```
-6. Access this url in the browser:
+9. Access this url in the browser:
 
     http://127.0.0.1:8000/
 

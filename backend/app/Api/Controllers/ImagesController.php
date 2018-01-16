@@ -9,9 +9,11 @@ use Illuminate\Http\Request,
 class ImagesController extends Controller
 {
 
-	public function __construct() {
-	}
-
+	/**
+	 * List all images from server
+	 * @param String $filter
+	 * @return Json
+	 */
 	public function list($filter) {
 
 		if ($filter === "all") {
@@ -25,23 +27,43 @@ class ImagesController extends Controller
 		return response()->json($images);
 	}
 
+	/**
+	 * Delete an image from server
+	 * @param Integer @id
+	 * @return String
+	 */
 	public function delete($id) {
 		$images = Image::find($id);
 		$images->deleted = true;
-		$images->save();
+		if(!$images->save()) {
+			return response($id, 500);
+		}
 		return response($id);
 	}
 
+	/**
+	 * Restore an image from server
+	 * @param Integer @id
+	 * @return String
+	 */
 	public function restore($id) {
 		$images = Image::find($id);
 		$images->deleted = false;
-		$images->save();
+		if(!$images->save()) {
+			return response($id, 500);
+		}
+
 		return response($id);
 	}
 
+	/**
+	 * Download an image from the server
+	 * @param Integer @id
+	 * @return Blob
+	 */
 	public function download($id) {
 		$images = Image::find($id);
-		$path = storage_path('../public/imgs/' . $images->file_system_name);
+		$path = config('custom.images.destinationPath'). $images->file_system_name;
 		return response()->download($path, $images->file_original_name);
 	}
 

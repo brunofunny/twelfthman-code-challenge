@@ -9,7 +9,7 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app';
+
   images : any;
   filterIsChecked : boolean;
   imageSelectedId : number;
@@ -17,6 +17,11 @@ export class AppComponent {
   imageSysName : string;
   environment = environment;
 
+  /**
+   * Initialize
+   * @param FetchImagesService
+   * @param modalService
+   */
   constructor(public FetchImagesService: FetchImagesService, public modalService: NgbModal) {
     this.filterIsChecked = true;
     this.FetchImagesService.fetchImages().subscribe((data:any) => {
@@ -25,6 +30,10 @@ export class AppComponent {
 
   }
 
+  /**
+   * List all images according to the filter
+   * @param type
+   */
   filterImages(type:string) {
     this.imageSelectedId = undefined;
     this.filterIsChecked = type === "all";
@@ -33,6 +42,11 @@ export class AppComponent {
     });
   }
 
+  /**
+   * Select an image
+   * @param image
+   * @param e
+   */
   pickImage(image:any, e) {
     e.stopPropagation();
     this.imageSelectedId = image.id;
@@ -40,22 +54,35 @@ export class AppComponent {
     this.imageSysName = image.file_system_name;
   }
 
+  /**
+   * Open modal to confirm delete
+   * @param content
+   */
   confirmDelete(content) {
     this.modalService.open(content).result.then((result) => {}, (reason) => {});
   }
 
+  /**
+   * Delete image, mark as deleted
+   */
   deleteImage() {
     this.FetchImagesService.deleteImage(this.imageSelectedId).subscribe((data:any) => {
       this.filterImages("all");
     });
   }
 
+  /**
+   * Restore image
+   */
   restoreImage() {
     this.FetchImagesService.restoreImage(this.imageSelectedId).subscribe((data:any) => {
       this.filterImages("all");
     });
   }
 
+  /**
+   * Deselect Image
+   */
   unselectImage(e) {
     this.imageSelectedId = undefined;
   }

@@ -24,13 +24,6 @@ class import extends Command
     protected $description = 'Import images from zip file';
 
     /**
-     * Path destination of images
-     *
-     * @var string
-     */
-    protected $destImgs = './public/imgs/';
-
-    /**
      * Ignore files
      *
      * @var array
@@ -72,7 +65,7 @@ class import extends Command
     {
         $file = $this->argument('file');
         $tmpZipDirLabel = uniqid();
-        $tmpZipDirPath = './storage/tmp/' . $tmpZipDirLabel;
+        $tmpZipDirPath = config('custom.images.temporaryPath') . $tmpZipDirLabel;
         $files = [];
         $filesNotCopied = [];
         $countSuccess = 0;
@@ -89,7 +82,7 @@ class import extends Command
                         $iterator = new \RecursiveIteratorIterator($tmpDir);
                         $filter = new \RegexIterator($iterator, '/^.+(.jpe?g|.png)$/i', \RecursiveRegexIterator::GET_MATCH);
 
-                        // Create a files array
+                        // Creating files array
                         foreach($filter as $filename => $filter) {
                             $files[] = $filename;
                         }
@@ -110,11 +103,12 @@ class import extends Command
                             $filenameUnique = md5(md5_file($filename) . $pathInfo['basename']);
                             $filenameNew = $filenameUnique . '.' . $pathInfo['extension'];
 
+                            // Check if file isn't bigger than maximum allowed
                             if (filesize($filename) < $this->maxAllowedSize) {
                                 // Check if the file is a duplicate (prevent from run multiple times the same file)
                                 $imageExists = Image::where(['file_system_name' => $filenameNew])->first();
                                 if (!$imageExists) {
-                                    if (copy($filename, $this->destImgs.$filenameNew)) {
+                                    if (copy($filename, config('custom.images.destinationPath').$filenameNew)) {
                                         $image = new Image;
                                         $image->file_original_name = $pathInfo['basename'];
                                         $image->file_system_name = $filenameNew;
@@ -122,7 +116,7 @@ class import extends Command
                                         $image->caption = $this->captionGenerate();
                                         $image->deleted = false;
                                         $image->save();
-    
+
                                         $countSuccess++;
                                     } else {
                                         $this->filesNotCopied($pathInfo['basename'], filesize($filename), 'Could not copy file');
@@ -169,15 +163,17 @@ class import extends Command
      */
     public function filesNotCopied($filename, $filesize, $error)
     {
+        $support = new Helpers;
+
         $this->filesNotCopied[] = [
             'name' => $filename,
-            'filesize' => $filesize,
+            'filesize' => $support->formatBytes($filesize),
             'msg' => $error
         ];
     }
 
     /**
-     * Generate a random name for caption
+     * Choose a random name for caption
      *
      * @return string
      */
