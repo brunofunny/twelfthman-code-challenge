@@ -15,9 +15,11 @@ $grey-light: #cccccc;
 $grey-medium: #9597a0;
 $grey-dark: #4f587d;
 
+$text: #FFF;
+$text-invert: $grey-dark;
+$link: #FFF;
+$link-hover: #FF0;
+
 // Layout
 $background: $grey;
 $logo: $grey-dark;
-
-// Image
-$border-color: $grey-light; 

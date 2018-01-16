@@ -1,0 +1,51 @@
+<header>
+  <div class="container">
+      <div id="logo">
+          <span>My Library</span>
+      </div>
+  </div>
+</header>
+<nav id="navigation-buttons">
+  <div class="container text-right">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-secondary {{filterIsChecked ? 'active' : ''}}" (click)="filterImages('all')">All</button>
+        <button type="button" class="btn btn-secondary {{!filterIsChecked ? 'active' : ''}}" (click)="filterImages('deleted')">Deleted</button>
+      </div>
+  </div>
+</nav>
+<section id="images" (click)="unselectImage()">
+  <div class="container">
+      <div class="row">
+          <div *ngFor="let image of images" class="col-xs-6 col-sm-4 col-lg-3" (click)="pickImage(image, $event)">
+              <div class="image-container {{image.id === imageSelectedId ? 'selected' : ''}}">
+                  <div class="image-container-canvas"><img [src]="'assets/imgs/' + image.image"></div>
+                  <div class="image-container-description">
+                      <p>{{image.name}}</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<div id="image-selected-actions" [hidden]="!imageSelectedId">
+  <a href="javascript:;" (click)="confirmDelete(content)"><i class="oi oi-trash" [hidden]="!filterIsChecked"></i></a>
+  <a href="javascript:;" (click)="restoreImage()"><i class="oi oi-action-undo" [hidden]="filterIsChecked"></i></a>
+  <a href="javascript:;" (click)="downloadImage()"><i class="oi oi-data-transfer-download"></i></a>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Confirmation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure that you want to delete this image ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="deleteImage(); d()">Delete</button>
+  </div>
+</ng-template>

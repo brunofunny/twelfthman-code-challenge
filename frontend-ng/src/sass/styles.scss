@@ -1,6 +1,3 @@
-// Bootstrap
-@import "./node_modules/bootstrap/scss/bootstrap.scss";
-
 // Modules and variables
 @import "partials/base";
 
@@ -11,5 +8,5 @@
 // Project
 @import "twelfthman/layout";
 @import "twelfthman/images-listing";
-@import "twelfthman/nav-action-buttons";
+@import "twelfthman/navigation-buttons";
 

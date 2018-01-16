@@ -19,6 +19,7 @@ class Kernel extends HttpKernel
         \Twelfthman\Sys\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \Twelfthman\Sys\Http\Middleware\TrustProxies::class,
+        \Barryvdh\Cors\HandleCors::class,
     ];
 
     /**

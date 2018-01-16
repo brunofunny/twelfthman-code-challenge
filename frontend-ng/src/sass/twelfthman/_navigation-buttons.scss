@@ -1,0 +1,15 @@
+.btn-group {
+    .btn {
+        width: 100px;
+
+        &.btn-secondary {
+            background: $grey-dark;
+            border-color: $grey-dark;
+
+            &.active {
+                background: transparent;
+                color: $grey-dark;
+            }
+        }
+    }
+}
