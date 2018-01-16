@@ -46,7 +46,7 @@ Clone this repo:
 ```
 5. You must install the database tables now, run the line below
 ```bash
-    php artisan migrate:install; php artisan migrate:migrate
+    php artisan migrate:install; php artisan migrate
 ```
 5. Then now we populate the database with some data (this file (load.zip) also contains some images that are suppose to return errors (exceed size limit))
 ```bash
