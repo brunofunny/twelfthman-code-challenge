@@ -4,9 +4,12 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 
-class ExampleTest extends TestCase
+class ImageControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic test example.
      *
@@ -14,6 +17,8 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
-        $this->assertTrue(true);
+        $user = factory(\App\Image::class, 10)->make();
+
+        dd($user->all());
     }
 }

@@ -9,6 +9,12 @@ use Illuminate\Http\Request,
 class ImagesController extends Controller
 {
 
+	protected $image;
+
+	public function __construct(Image $image) {
+		$this->image = $image;
+	}
+
 	/**
 	 * List all images from server
 	 * @param String $filter
@@ -17,9 +23,9 @@ class ImagesController extends Controller
 	public function list($filter) {
 
 		if ($filter === "all") {
-			$images = Image::where(['deleted' => false])->get();
+			$images = $this->image->where(['deleted' => false])->get();
 		} else if ($filter === "deleted") {
-			$images = Image::where(['deleted' => true])->get();
+			$images = $this->image->where(['deleted' => true])->get();
 		} else {
 			$images = [];
 		}
@@ -33,7 +39,7 @@ class ImagesController extends Controller
 	 * @return String
 	 */
 	public function delete($id) {
-		$images = Image::find($id);
+		$images = $this->image->find($id);
 		$images->deleted = true;
 		if(!$images->save()) {
 			return response($id, 500);
@@ -47,7 +53,7 @@ class ImagesController extends Controller
 	 * @return String
 	 */
 	public function restore($id) {
-		$images = Image::find($id);
+		$images = $this->image->find($id);
 		$images->deleted = false;
 		if(!$images->save()) {
 			return response($id, 500);
@@ -62,7 +68,7 @@ class ImagesController extends Controller
 	 * @return Blob
 	 */
 	public function download($id) {
-		$images = Image::find($id);
+		$images = $this->image->find($id);
 		$path = config('custom.images.destinationPath'). $images->file_system_name;
 		return response()->download($path, $images->file_original_name);
 	}

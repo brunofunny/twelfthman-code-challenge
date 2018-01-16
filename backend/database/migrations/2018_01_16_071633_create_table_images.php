@@ -17,7 +17,7 @@ class CreateTableImages extends Migration
             $table->increments('id');
             $table->string('file_original_name');
             $table->string('file_system_name');
-            $table->string('file_extension');
+            $table->char('file_extension', 4);
             $table->string('caption');
             $table->boolean('deleted');
             $table->timestamps();
