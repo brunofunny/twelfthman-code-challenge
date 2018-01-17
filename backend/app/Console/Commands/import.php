@@ -105,9 +105,8 @@ class import extends Command
 
                             // Check if file isn't bigger than maximum allowed
                             if (filesize($filename) < config("custom.images.maxAllowedSize")) {
-
-                                $newFilename = md5($filename . time());
-                                if (Storage::disk('images')->put('./', new File($filename))) {
+                                $newFilename = Storage::disk('images')->put(null, new File($filename));
+                                if ($newFilename) {
                                     $image = new Image;
                                     $image->file_original_name = $pathInfo['basename'];
                                     $image->file_system_name = $newFilename;
