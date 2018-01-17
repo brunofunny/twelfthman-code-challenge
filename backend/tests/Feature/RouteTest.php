@@ -14,8 +14,9 @@ class RouteTest extends TestCase
      */
     public function testListAllImages()
     {
+        $image = factory(\App\Image::class)->create();
+        
         $response = $this->get('api/images/all');
-
         $response->assertStatus(200);
     }
 
@@ -26,8 +27,11 @@ class RouteTest extends TestCase
      */
     public function testListAllDeletedImages()
     {
-        $response = $this->get('api/images/deleted');
 
+        $image = factory(\App\Image::class)->create();
+
+        $response = $this->get('api/images/deleted');
+        $response->assertHeader('Content-Type', 'application/json');
         $response->assertStatus(200);
     }
 
@@ -38,9 +42,10 @@ class RouteTest extends TestCase
      */
     public function testRestoreImage()
     {
-        $response = $this->get('api/images/restore/000');
+        $image = factory(\App\Image::class)->create();
 
-        $response->assertStatus(500);
+        $response = $this->get('api/images/restore/' . $image->id);
+        $response->assertStatus(200);
     }
 
     /**
@@ -50,8 +55,10 @@ class RouteTest extends TestCase
      */
     public function testDeleteAnImage()
     {
-        $response = $this->get('api/images/download/000');
+        $image = factory(\App\Image::class)->create();
 
-        $response->assertStatus(500);
+        $response = $this->delete('api/images/' . $image->id);
+        $response->assertStatus(200);
     }
+
 }

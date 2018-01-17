@@ -15,7 +15,7 @@ All details at https://twelfthman.co/interview-tests/developers/
 ### Requirements
 
 - **GIT**
-- **PHP 7.x**
+- **PHP 7.x** (and extensions)
 	- mbstring
 	- dom
 	- mysql
@@ -84,3 +84,12 @@ Clone this repo:
 6. Access this url in the browser:
 
     http://127.0.0.1:4200/
+
+
+### Unit Tests
+
+To run the tests use the command below
+
+```bash
+vendor/phpunit/phpunit/phpunit
+```

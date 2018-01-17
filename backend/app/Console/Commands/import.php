@@ -3,7 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File;
 use App\Support\Helpers;
+use Faker\Factory as Faker;
 use App\Image;
 use ZipArchive;
 
@@ -33,11 +36,11 @@ class import extends Command
     ];
 
     /**
-     * Max allowed size
+     * Files copied
      *
-     * @var integer
+     * @var array
      */
-    protected $maxAllowedSize = 5242880;
+    protected $filesCopied = [];
 
     /**
      * Files not copied
@@ -67,8 +70,6 @@ class import extends Command
         $tmpZipDirLabel = uniqid();
         $tmpZipDirPath = config('custom.images.temporaryPath') . $tmpZipDirLabel;
         $files = [];
-        $filesNotCopied = [];
-        $countSuccess = 0;
 
         if (file_exists($file)) {
             $zip = new ZipArchive;
@@ -97,35 +98,30 @@ class import extends Command
                             return true;
                         });
 
-                        // Move files to their final destination
+                        // Move files to media folder
                         foreach($files as $filename) {
+
                             $pathInfo = pathinfo($filename);
-                            $filenameUnique = md5(md5_file($filename) . $pathInfo['basename']);
-                            $filenameNew = $filenameUnique . '.' . $pathInfo['extension'];
 
                             // Check if file isn't bigger than maximum allowed
-                            if (filesize($filename) < $this->maxAllowedSize) {
-                                // Check if the file is a duplicate (prevent from run multiple times the same file)
-                                $imageExists = Image::where(['file_system_name' => $filenameNew])->first();
-                                if (!$imageExists) {
-                                    if (copy($filename, config('custom.images.destinationPath').$filenameNew)) {
-                                        $image = new Image;
-                                        $image->file_original_name = $pathInfo['basename'];
-                                        $image->file_system_name = $filenameNew;
-                                        $image->file_extension = $pathInfo['extension'];
-                                        $image->caption = $this->captionGenerate();
-                                        $image->deleted = false;
-                                        $image->save();
+                            if (filesize($filename) < config("custom.images.maxAllowedSize")) {
 
-                                        $countSuccess++;
-                                    } else {
-                                        $this->filesNotCopied($pathInfo['basename'], filesize($filename), 'Could not copy file');
-                                    }
+                                $newFilename = md5($filename . time());
+                                if (Storage::disk('images')->put('./', new File($filename))) {
+                                    $image = new Image;
+                                    $image->file_original_name = $pathInfo['basename'];
+                                    $image->file_system_name = $newFilename;
+                                    $image->file_extension = $pathInfo['extension'];
+                                    $image->caption = (Faker::create())->catchPhrase;
+                                    $image->deleted = false;
+                                    $image->save();
+
+                                    $this->fileCopyLog(true, $pathInfo['basename'], filesize($filename));
                                 } else {
-                                    $this->filesNotCopied($pathInfo['basename'], filesize($filename), 'Duplicated file');
+                                    $this->fileCopyLog(false, $pathInfo['basename'], filesize($filename), 'Could not copy file');
                                 }
                             } else {
-                                $this->filesNotCopied($pathInfo['basename'], filesize($filename), 'File size is bigger than allowed');
+                                $this->fileCopyLog(false, $pathInfo['basename'], filesize($filename), 'File size is bigger than allowed');
                             }
                         }
 
@@ -134,13 +130,7 @@ class import extends Command
                         $helper->rmdir($tmpZipDirPath);
 
                         // Output statistics
-                        $this->info($countSuccess . ' file(s) were copied successfully');
-                        if (($countFailed = count($this->filesNotCopied)) > 0) {
-                            $this->warn($countFailed . ' file(s) failed:');
-                            foreach ($this->filesNotCopied as $files) {
-                                $this->error('Name: ' . $files['name'] . ' | Filesize: ' . $files['filesize'] . ' | Msg: ' . $files['msg'] );
-                            }
-                        }
+                        $this->table(['Filename', 'Size', 'Message'], array_merge($this->filesNotCopied, $this->filesCopied));
 
                     } else {
                         $this->error('Failed to extract files');
@@ -161,35 +151,24 @@ class import extends Command
      *
      * @return void
      */
-    public function filesNotCopied($filename, $filesize, $error)
+    public function fileCopyLog($success, $filename, $filesize, $error = "OK")
     {
         $support = new Helpers;
 
-        $this->filesNotCopied[] = [
-            'name' => $filename,
-            'filesize' => $support->formatBytes($filesize),
-            'msg' => $error
-        ];
-    }
+        if ($success) {
+            $this->filesCopied[] = [
+                'name' => $filename,
+                'filesize' => $support->formatBytes($filesize),
+                'msg' => 'OK'
+            ];
+        } else {
+            $this->filesNotCopied[] = [
+                'name' => $filename,
+                'filesize' => $support->formatBytes($filesize),
+                'msg' => $error
+            ];
+        }
 
-    /**
-     * Choose a random name for caption
-     *
-     * @return string
-     */
-    public function captionGenerate()
-    {
-        $captions = [
-            'Partnership Rationale',
-            'Who we are',
-            'Our clubs',
-            'The opportunity',
-            'Last Crusade Till Tomorrow',
-            'Fighting for more resources',
-            'Once Upon a Time',
-        ];
-
-        return $captions[rand(0, count($captions) - 1)];
     }
 
 }
